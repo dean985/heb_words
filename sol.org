@@ -85,22 +85,11 @@ transformer-based language models that have achieved remarkable success in
 a wide range of natural language processing tasks.
 
 * Question 2
-two phases:
-1. find the word suspected as a number based on the root of the word
-   1. extract all the words that are suspected as numbers. consider:
-      1. one digit number
-      2. two digit number
-      3. three
-      4. four
-   2. find an algorithm that can convert the word to a number. Two options:
-      1. HACK: translate to english and find an algorithm that does the job
-      2. Establish the structure of the words and form the number from it.
-#+begin_src python
-import re
-def get_regex(word):
-    pattern = r'^' + word
-
-#+end_src
+I approached the problem in following way:
+1. Use regex in order to identify the words that represent a number in hebrew within a text, using a set of indicative words
+2. Translate those words into English
+3. Convert the English words into integers
+4. Replace the Hebrew words in the original text with their corresponding integers
 * question 4
 Not deep learning
 read about similarity of text.
