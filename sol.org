@@ -90,10 +90,25 @@ I approached the problem in following way:
 2. Translate those words into English
 3. Convert the English words into integers
 4. Replace the Hebrew words in the original text with their corresponding integers
-* question 4
-Not deep learning
-read about similarity of text.
+* Question 4
+Read about similarity of text.
+
+General Idea (or pipeline):
 two phases:
 1. first: embed the text into a vector of features
 make a comparison between human-thought features and known text features that involves deep learning - explore their tradeoffs.
 2. second: use a known clustering algorithm that will use the the features in order to create a metric of imagination between two articles.
+
+** Metrics
+*** Jaccard Similarity
+Let s1 and s2 be strings containing words. Jaccard similarity is the calculated as the
+word intersection and word union.
+First we perform lemmatization, which is reducing words to their root word (i.e friendly
+becomes friend). After that we calculate:
+#+begin_src python
+def jaccard_sim(str1,str2):
+    a = set(str1.split())
+    b = set(str2.split())
+    c = a.intersection(b)
+    return float( len(c)/ (lena(a) +len(b) - len(c)) )
+#+end_src
