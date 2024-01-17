@@ -1,0 +1,110 @@
+#+title: Sol
+
+* Fetch
+In order to fetch text from a news website, I'll use beautifulsoup
+library to parse the article body's text
+
+#+begin_src python
+import requests
+from bs4 import BeautifulSoup
+url = 'https://www.ynet.co.il/news/article/sjgohwqyt'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+# Fetch the text via the class name (might need to change it for other websites)
+# This class name is applicable for some articles on ynet.co.il
+class_name = 'public-DraftEditor-content'
+article_content = soup.find('div', {'class': class_name})
+
+if article_content:
+    article_text = article_content.get_text()
+    print("The content was saved to a file")
+    with open('article_content.txt', 'w', encoding='utf-8') as file:
+        file.write(article_text)
+
+else:
+    print('Article content wasnt fetched')
+#+end_src
+
+* Convert
+Find every words that represents a number and convert it to that number.
+For example, "three" will become 3 and "three thousand four hundred ninety nine" will be 3499.
+
+In hebrew.
+** Language Models
+In general, language models are AI models designed to understand and
+generate human language. These models are trained on large datasets
+containing examples of text and learn to predict the next word
+or sequence of words in a given context.
+Now, let's break down some key terms related to language models:
+
+*** Feedforward Neural Networks (FNN):
+Feedforward neural networks are the foundational building blocks of deep
+learning. They consist of layers of nodes (neurons) where information
+flows in one direction, from the input layer to the output layer. Each
+connection between nodes has a weight, and the network learns by adjusting
+these weights during training to minimize the difference between predicted
+and actual outputs.
+
+*** Recurrent Neural Networks (RNN):
+RNNs are a type of neural network architecture designed to handle
+sequential data, making them well-suited for natural language processing
+tasks.
+
+Unlike feedforward networks, RNNs have connections that form loops,
+allowing them to maintain a hidden state and capture information from
+previous steps in the sequence.
+
+However, traditional RNNs have limitations in capturing long-range dependencies due to issues like vanishing or exploding gradients.
+
+*** Transformers:
+Transformers are a type of neural network architecture introduced in the paper "Attention is All You Need" by Vaswani et al.
+
+Unlike RNNs, transformers do not rely on sequential processing and instead
+use a mechanism called _self-attention_ to consider all positions in the
+input sequence simultaneously.
+
+This makes them highly efficient for parallelization and helps in
+capturing long-range dependencies more effectively than traditional RNNs.
+
+_The key innovation_ in transformers is the _self-attention mechanism_, which
+allows the model to weigh different parts of the input sequence
+differently based on their relevance to the current prediction.
+
+This attention mechanism makes transformers particularly well-suited for
+natural language processing tasks, and they have become the backbone of
+many state-of-the-art language models.
+
+Language models can be built using various architectures, and transformers
+_have become the dominant choice due to their superior performance_ and
+scalability.
+
+Models like GPT (Generative Pre-trained Transformer) and BERT
+(Bidirectional Encoder Representations from Transformers) are examples of
+transformer-based language models that have achieved remarkable success in
+a wide range of natural language processing tasks.
+
+* Question 2
+two phases:
+1. find the word suspected as a number based on the root of the word
+   1. extract all the words that are suspected as numbers. consider:
+      1. one digit number
+      2. two digit number
+      3. three
+      4. four
+   2. find an algorithm that can convert the word to a number. Two options:
+      1. HACK: translate to english and find an algorithm that does the job
+      2. Establish the structure of the words and form the number from it.
+#+begin_src python
+import re
+def get_regex(word):
+    pattern = r'^' + word
+
+#+end_src
+* question 4
+Not deep learning
+read about similarity of text.
+two phases:
+1. first: embed the text into a vector of features
+make a comparison between human-thought features and known text features that involves deep learning - explore their tradeoffs.
+2. second: use a known clustering algorithm that will use the the features in order to create a metric of imagination between two articles.
