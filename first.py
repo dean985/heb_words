@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from translate import Translator
 from word2number import w2n
 import re
+import pandas as pd
+
 
 heb_numbers_keywords = ['אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'שש', 'שבע', 'שמונה', 'תשע', 'עשר', 'עשרה', 'עשרים',
                         'שלושים', 'ארבעים', 'חמישים', 'שישים', 'שבעים', 'שמונים', 'תשעים', 'מאה', 'מאתיים', 'שלוש מאות',
@@ -40,11 +42,19 @@ def question2(text):
         modified_text = text.replace(old_text_heb, new_text_num)
     return modified_text
 
+def question3(text):
+    # the given text is after the processing done in question2, therefore we can look for numeric values
+    results = find_num_word_tuple(text)
+    n = len(results)
+    data = {"Number": [int(results[i][0]) for i in range(n)], 
+            "Word": [results[i][1] for i in range (n)]}
+    df = pd.DataFrame(data)
+    # To remove exact suplicate of words.
+    # groups same words and sum their quantity
+    df_grouped = df.groupby('Word', as_index=False)['Number'].sum()
 
-
-
-
-
+    print(df_grouped)
+    return df_grouped
 
 def get_article_content(url='https://www.ynet.co.il/laisha/article/b1al4tzyp'):
     # Given a URL, this function will return the article content in a string form
@@ -78,3 +88,18 @@ def find_sequences(sentence, words):
 
     matches = re.findall(pattern, sentence)
     return matches
+
+def find_num_word_tuple(text):
+    # a regex that searches for a number followed by a space and another word.
+    # it excepts also prefix for the number
+    pattern = r'\b[א-ת]*(\d+)\s*([a-zA-Zא-ת]+)\b'
+    matches = re.findall(pattern, text)
+    results = []
+    for match in matches:
+        number, word = match
+        results.append((number,word))
+        print(f"Number: {number}, Word: {word}")
+    return results
+
+
+question3("לביבי יש 3 חתולים ו4 כלבים. לשרה יש 5 חתולים בנפרד ו6כג ילדים שנהנים מהחתולים")
