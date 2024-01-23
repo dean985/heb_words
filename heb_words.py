@@ -112,7 +112,7 @@ def get_words_to_replace(text):
     for w in eng_version:
         try:
             nums.append(w2n.word_to_num(w))
-        except ValueError:
+        except:
             # One of the values wasn't translated correctly
             nums.append("")
             pass
@@ -122,12 +122,11 @@ def get_words_to_replace(text):
 
     # If the english word was empty after translation, something went wrong with the translation.
     # Therefore, don't change that word.
-    filtered_list = [(eng, heb, num) for eng, heb, num in sorted_words if eng != ""]
-    print(filtered_list)
+    filtered_list = [(eng, heb, num) for eng, heb, num in sorted_words if num != ""]
     return filtered_list
 
 
-### Question 1
+# Question 1
 def get_article_content(url="https://www.ynet.co.il/laisha/article/b1al4tzyp"):
     """
     Fetch and return the content of an article from the specified URL. Additionally, save the content to a file.
@@ -224,7 +223,6 @@ def find_num_word_tuple(text):
     for match in matches:
         number, word = match
         results.append((number, word))
-        print(f"Number: {number}, Word: {word}")
     return results
 
 
@@ -282,18 +280,6 @@ def question3(text):
         "Word": [results[i][1] for i in range(n)],
     }
     df = pd.DataFrame(data)
-    print(df)
     return df
 
 
-def test_q2():
-    with open("article_content.txt", "r") as file:
-        content = file.read()
-        question2(content)
-
-def test_q3():
-    with open("modified_content.txt", "r") as file:
-        content = file.read()
-    question3(content)
-
-test_q3()
